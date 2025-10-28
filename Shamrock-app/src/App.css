@@ -1,37 +1,28 @@
-/* ===== RESET Y GLOBAL ===== */
-html,
-body,
-#root {
-  height: 100%;
-  width: 100%;
+html, body, #root {
   margin: 0;
   padding: 0;
+  height: 100%;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f7f9fc;
-}
-
-/* ===== LOGIN ===== */
-.login-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
-  background: linear-gradient(135deg, #004d40, #00796b);
 }
 
 .login-box {
   background-color: white;
   padding: 40px 50px;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.3);
   text-align: center;
-  width: 350px;
+  width: 360px;
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .login-box h1 {
-  margin-bottom: 30px;
   color: #004d40;
+  margin-bottom: 25px;
 }
 
 .login-box input {
@@ -46,7 +37,6 @@ body,
 .login-box button {
   width: 100%;
   padding: 12px;
-  margin-top: 10px;
   background-color: #004d40;
   color: white;
   border: none;
@@ -57,7 +47,13 @@ body,
 }
 
 .login-box button:hover {
-  background-color: #00695c;
+  background-color: #00796b;
+}
+
+.link {
+  color: #004d40;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .error {
@@ -66,22 +62,21 @@ body,
   margin-top: 10px;
 }
 
-.hint {
-  margin-top: 15px;
-  color: #777;
-  font-size: 0.8rem;
+.success {
+  color: green;
+  font-size: 0.9rem;
+  margin-top: 10px;
 }
 
-/* ===== DASHBOARD ===== */
+/* DASHBOARD */
 .app-container {
   display: flex;
   height: 100vh;
   width: 100vw;
 }
 
-/* Sidebar */
 .sidebar {
-  width: 250px;
+  width: 260px;
   background-color: #004d40;
   color: white;
   display: flex;
@@ -94,7 +89,13 @@ body,
 .logo {
   font-size: 1.8rem;
   font-weight: bold;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
+}
+
+.usuario {
+  font-size: 1rem;
+  margin-bottom: 40px;
+  color: #b2dfdb;
 }
 
 .menu {
@@ -119,11 +120,6 @@ body,
   background-color: #00695c;
 }
 
-.menu-item svg {
-  font-size: 1.4rem;
-}
-
-/* Botón cerrar sesión */
 .logout-btn {
   width: 100%;
   background-color: #00332b;
@@ -137,20 +133,115 @@ body,
   justify-content: center;
   gap: 10px;
   transition: 0.3s;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgba(255,255,255,0.2);
 }
 
 .logout-btn:hover {
   background-color: #b71c1c;
 }
 
-/* Contenido */
 .contenido {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
-  color: #333;
   background-color: #f7f9fc;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.sidebar-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 3px solid #f7f7f7;
+}
+.sidebar-logo2 {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 3px solid #00471b; /* verde elegante */
+  box-shadow: 0 0 10px rgba(0, 77, 64, 0.3);
+  transition: all 0.3s ease;
+}
+
+.sidebar-logo2:hover {
+  transform: scale(1.05);
+  border-color: #01360d;
+}
+
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(135deg, #01350e, #003a0f);
+  background-size: 200% 200%;
+  animation: gradientMove 6s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.login-box {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 50px 60px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  width: 380px;
+  animation: fadeIn 0.6s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.login-box button {
+  width: 100%;
+  padding: 12px;
+  background-color: #004d40;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.login-box button:hover {
+  background-color: #00796b;
+  transform: scale(1.03);
+}
+
+.sidebar-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 3px solid #26a69a;
+  box-shadow: 0 0 10px rgba(0, 77, 64, 0.3);
+  transition: all 0.3s ease;
+}
+
+.sidebar-logo:hover {
+  transform: scale(1.05);
+  border-color: #004d40;
 }
