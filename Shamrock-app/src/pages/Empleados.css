@@ -1,0 +1,67 @@
+.usuarios-container {
+  padding: 2rem 3rem;
+  background-color: #f9fafb;
+  min-height: 100vh;
+}
+
+.usuarios-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.usuarios-header h2 {
+  color: #004d40;
+  font-weight: 700;
+}
+
+.tabla-empleados {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tabla-empleados th,
+.tabla-empleados td {
+  text-align: left;
+  padding: 0.9rem 1.2rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tabla-empleados th {
+  background-color: #004d40;
+  color: white;
+  font-weight: 600;
+}
+
+.tabla-empleados tr:hover {
+  background-color: #f1f8f6;
+}
+
+.estado {
+  padding: 0.3rem 0.7rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.estado.activo {
+  background-color: #c8e6c9;
+  color: #256029;
+}
+
+.estado.inactivo {
+  background-color: #ffcdd2;
+  color: #b71c1c;
+}
+
+.cargando {
+  text-align: center;
+  color: #004d40;
+  font-weight: 500;
+  font-size: 1.1rem;
+}

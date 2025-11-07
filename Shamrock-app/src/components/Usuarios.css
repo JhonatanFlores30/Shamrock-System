@@ -1,0 +1,153 @@
+/* === CONTENEDOR PRINCIPAL === */
+.usuario-dashboard {
+  display: flex;
+  height: 100vh;
+  width: 100vw; /* ✅ Ocupa todo el ancho de la ventana */
+  background-color: #f8fafc;
+  font-family: "Segoe UI", sans-serif;
+  overflow: hidden;
+}
+
+/* === SIDEBAR === */
+.usuario-sidebar {
+  width: 280px;
+  background-color: #004d40;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+  align-items: center;
+  padding: 2rem 1rem;
+  flex-shrink: 0;
+  height: 95vh;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+}
+.usuario-info {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.usuario-info h3 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.puntos {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 0.5rem;
+  color: #fdd835;
+}
+
+/* === MENÚ === */
+.usuario-menu {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: auto;
+}
+
+.usuario-menu button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 0.8rem;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s, transform 0.1s;
+  font-size: 1rem;
+}
+
+.usuario-menu button:hover,
+.usuario-menu button.activo {
+  background-color: #00695c;
+  transform: translateX(3px);
+}
+/* === BOTÓN SALIR === */
+.logout-btn {
+  background-color: #e53935;
+  border: none;
+  color: white;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: 500;
+  transition: background 0.2s;
+  margin-top: 1rem;
+}
+
+.logout-btn:hover {
+  background-color: #c62828;
+}
+
+/* === CONTENIDO PRINCIPAL === */
+.usuario-contenido {
+  flex: 1; /* ✅ Se estira para ocupar todo el espacio disponible */
+  padding: 2rem 3rem;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #f9fafb 0%, #ffffff 100%);
+}
+
+/* === RECOMPENSAS === */
+.recompensas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.recompensa-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.2rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.15s ease;
+}
+
+.recompensa-card:hover {
+  transform: translateY(-5px);
+}
+
+.recompensa-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.puntos-req {
+  display: block;
+  color: #00796b;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.btn-canjear {
+  background-color: #00796b;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 0.8rem;
+  transition: background 0.2s;
+}
+
+.btn-canjear:hover:not(:disabled) {
+  background-color: #004d40;
+}
+
+.btn-canjear:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+.perfil-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  max-width: 500px;
+  line-height: 1.8rem;
+}

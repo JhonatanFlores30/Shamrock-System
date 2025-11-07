@@ -1,0 +1,199 @@
+/* 🌐 Contenedor principal */
+.areas-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1.5rem;
+  width: 100%;
+  background-color: #f8fafc;
+  min-height: 90vh;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* 🧱 Tarjeta principal */
+.areas-card-horizontal {
+  background: #fff;
+  width: 100%;
+  max-width: 1200px;
+  padding: 2rem 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.4s ease-in-out;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* 🔠 Título */
+.areas-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1a3b5d;
+  margin-bottom: 1.8rem;
+}
+
+/* 🧩 Layout horizontal */
+.areas-horizontal-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: flex-start;
+}
+
+/* 🧾 Formulario */
+.areas-form-section {
+  background: #f9fbff;
+  border: 1px solid #e0e7ff;
+  padding: 1.5rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
+  height: fit-content;
+}
+
+.areas-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.areas-form input,
+.areas-form button {
+  border-radius: 10px;
+}
+
+/* 📋 Lista de áreas con scroll independiente */
+.areas-list-section {
+  background: #f9fbff;
+  border: 1px solid #e0e7ff;
+  padding: 1.5rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
+  width: 100%;
+  height: 100%;
+  max-height: calc(100vh - 220px); /* ajusta según tu header */
+  overflow-y: auto; /* 🟢 Scroll vertical solo aquí */
+  overflow-x: hidden;
+  box-sizing: border-box;
+  scrollbar-width: thin; /* Firefox */
+}
+
+/* Personalizar barra de desplazamiento (WebKit) */
+.areas-list-section::-webkit-scrollbar {
+  width: 8px;
+}
+.areas-list-section::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 8px;
+}
+.areas-list-section::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+}
+.areas-list-section::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* 📋 Lista de áreas */
+.areas-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.area-item {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  transition: all 0.25s ease;
+}
+
+.area-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.15);
+}
+
+.area-item h4 {
+  color: #1d4ed8;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* 🔘 Botones */
+.area-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* 📱 Responsive */
+@media (max-width: 950px) {
+  .areas-horizontal-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .areas-list-section {
+    max-height: none; /* en móvil, scroll global */
+  }
+
+  .areas-card-horizontal {
+    padding: 1.2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .area-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .area-buttons {
+    justify-content: flex-end;
+  }
+
+  .areas-card-horizontal {
+    padding: 1rem;
+  }
+}
+
+/* 🔍 Buscador */
+.areas-search {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  background-color: #fff;
+  transition: 0.3s ease;
+  box-sizing: border-box;
+}
+
+.areas-search:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  outline: none;
+}
+
+/* Mejor integración con el scroll derecho */
+.areas-list-section {
+  display: flex;
+  flex-direction: column;
+}
+.area-count {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border-radius: 8px;
+  padding: 0.3rem 0.6rem;
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-top: 0.4rem;
+}

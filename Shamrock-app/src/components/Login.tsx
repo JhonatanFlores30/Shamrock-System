@@ -1,30 +1,47 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import supabase from "../utils/supabaseClient";
 
-interface LoginProps {
-  onLogin: (user: string) => void;
-}
-
-export default function Login({ onLogin }: LoginProps) {
+export default function Login() {
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [mensaje, setMensaje] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    const storedUsers = JSON.parse(localStorage.getItem("usuarios") || "[]");
+  const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError("");
+  setMensaje("");
+  setLoading(true);
 
-    const user = storedUsers.find(
-      (u: { user: string; pass: string }) => u.user === usuario && u.pass === password
-    );
+  console.log("🚀 Intentando iniciar sesión con:", usuario);
 
-    if (user) {
-      onLogin(usuario);
-    } else {
-      setError("Usuario o contraseña incorrectos");
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: usuario.trim(),
+      password: password,
+    });
+
+    console.log("📩 Respuesta de Supabase:", { data, error });
+
+    if (error) {
+      setError("❌ Usuario o contraseña incorrectos");
+      console.error(error.message);
+      setLoading(false);
+      return;
     }
-  };
+
+    if (data?.user) {
+      setMensaje("✅ Inicio de sesión exitoso");
+    }
+
+    setLoading(false);
+  } catch (err) {
+    console.error("💥 Error inesperado:", err);
+    setError("Error al conectar con el servidor.");
+    setLoading(false);
+  }
+};
 
   return (
     <div className="login-container">
@@ -35,30 +52,26 @@ export default function Login({ onLogin }: LoginProps) {
 
         <form onSubmit={handleLogin}>
           <input
-            type="text"
-            placeholder="Usuario"
+            type="email"
+            placeholder="Correo electrónico"
             value={usuario}
             onChange={(e) => setUsuario(e.target.value)}
+            required
           />
           <input
             type="password"
             placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
-          <button type="submit" className="btn-ingresar">
-            Ingresar
+          <button type="submit" className="btn-ingresar" disabled={loading}>
+            {loading ? "Cargando..." : "Ingresar"}
           </button>
         </form>
 
+        {mensaje && <p className="mensaje-exito">{mensaje}</p>}
         {error && <p className="error">{error}</p>}
-
-        <p className="hint">
-          ¿No tienes cuenta?{" "}
-          <span className="link" onClick={() => navigate("/registro")}>
-            Crear cuenta
-          </span>
-        </p>
       </div>
     </div>
   );

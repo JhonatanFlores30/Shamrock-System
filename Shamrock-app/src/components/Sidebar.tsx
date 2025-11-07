@@ -18,7 +18,13 @@ export default function Sidebar({ user, onLogout }: SidebarProps) {
           <FaHome /> <span>Inicio</span>
         </Link>
         <Link to="/empleado" className="menu-item">
-          <FaUsers /> <span>Empleados</span>
+          <FaUsers /> <span>Gestión de Recompensas</span>
+        </Link>
+        <Link to="/registrar" className="menu-item">
+          <FaUsers /> <span>Gestión Empleados</span>
+        </Link>
+        <Link to="/gestionareas" className="menu-item">
+          <FaUsers /> <span>Gestión de Áreas</span>
         </Link>
       </nav>
 
