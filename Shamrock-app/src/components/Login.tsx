@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // 
 import supabase from "../utils/supabaseClient";
 
 export default function Login() {
@@ -7,41 +8,53 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [mensaje, setMensaje] = useState("");
+  const navigate = useNavigate(); 
 
   const handleLogin = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setError("");
-  setMensaje("");
-  setLoading(true);
+    e.preventDefault();
+    setError("");
+    setMensaje("");
+    setLoading(true);
 
-  console.log("🚀 Intentando iniciar sesión con:", usuario);
+    console.log("🚀 Intentando iniciar sesión con:", usuario);
 
-  try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: usuario.trim(),
-      password: password,
-    });
+    try {
+      // 1️⃣ Llamada a Supabase
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: usuario.trim(),
+        password,
+      });
 
-    console.log("📩 Respuesta de Supabase:", { data, error });
+      console.log("📩 Respuesta de Supabase:", { data, error });
 
-    if (error) {
-      setError("❌ Usuario o contraseña incorrectos");
-      console.error(error.message);
+      if (error) {
+        setError("❌ Usuario o contraseña incorrectos");
+        console.error(error.message);
+        setLoading(false);
+        return;
+      }
+
+      // 2️⃣ Aquí agregas este bloque ↓↓↓
+      //    Esto garantiza que Supabase ya guardó la sesión
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (sessionData?.session) {
+        setMensaje("✅ Inicio de sesión exitoso");
+        console.log("🎟 Sesión creada correctamente:", sessionData.session);
+
+        // 🔥 Redirige al App principal (App.tsx detectará el rol y te enviará al lugar correcto)
+        setTimeout(() => navigate("/"), 0);
+      } else {
+        console.warn("⚠️ No se detectó sesión activa aún");
+      }
+      // 2️⃣↑↑↑ Este bloque debe ir justo aquí, después de signInWithPassword
+
       setLoading(false);
-      return;
+    } catch (err) {
+      console.error("💥 Error inesperado:", err);
+      setError("Error al conectar con el servidor.");
+      setLoading(false);
     }
-
-    if (data?.user) {
-      setMensaje("✅ Inicio de sesión exitoso");
-    }
-
-    setLoading(false);
-  } catch (err) {
-    console.error("💥 Error inesperado:", err);
-    setError("Error al conectar con el servidor.");
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="login-container">

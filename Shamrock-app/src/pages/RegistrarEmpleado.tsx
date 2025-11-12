@@ -2,69 +2,61 @@ import { useState, useEffect } from "react";
 import supabase from "../utils/supabaseClient";
 import "./RegistrarEmpleado.css";
 
-export default function RegistrarEmpleado() {
+export default function GestionEmpleados() {
+  const [empleados, setEmpleados] = useState<any[]>([]);
+  const [areas, setAreas] = useState<{ id: string; nombre: string }[]>([]);
+  const [puestos, setPuestos] = useState<{ id: string; nombre: string; area_id: string }[]>([]);
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [mensaje, setMensaje] = useState("");
+
+  // Formulario
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rol, setRol] = useState<"admin" | "usuario">("usuario");
   const [areaId, setAreaId] = useState("");
-  const [areas, setAreas] = useState<{ id: string; nombre: string }[]>([]);
   const [puestoId, setPuestoId] = useState("");
-  const [puestos, setPuestos] = useState<{ id: string; nombre: string }[]>([]);
-  const [mensaje, setMensaje] = useState("");
   const [cargando, setCargando] = useState(false);
 
-  // 🔹 Cargar áreas
+  // === Cargar áreas, puestos y empleados ===
   useEffect(() => {
-    const cargarAreas = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("areas")
-          .select("id, nombre")
-          .order("nombre");
-        if (error) throw error;
-        setAreas(data || []);
-      } catch (err: any) {
-        console.error("💥 Error cargando áreas:", err.message);
-        setMensaje("❌ No se pudieron cargar las áreas.");
-      }
-    };
-    cargarAreas();
-  }, []);
+  const cargarEmpleados = async () => {
+    // Obtener todos los empleados
+    const { data: empleadosRaw, error } = await supabase
+      .from("empleados")
+      .select("*")
+      .order("nombre");
 
-  // 🔹 Cargar puestos según área seleccionada
-  useEffect(() => {
-    const cargarPuestos = async () => {
-      if (!areaId) {
-        setPuestos([]);
-        setPuestoId("");
-        return;
-      }
-      try {
-        const { data, error } = await supabase
-          .from("puestos")
-          .select("id, nombre")
-          .eq("area_id", areaId)
-          .order("nombre");
-        if (error) throw error;
-        setPuestos(data || []);
-        setPuestoId("");
-      } catch (err: any) {
-        console.error("💥 Error cargando puestos:", err.message);
-        setMensaje("❌ No se pudieron cargar los puestos de esta área.");
-      }
-    };
-    cargarPuestos();
-  }, [areaId]);
+    if (error) {
+      console.error("Error cargando empleados:", error.message);
+      return;
+    }
 
-  // 🔹 Registrar empleado
+    // Cargar todas las áreas y puestos
+    const { data: dataAreas } = await supabase.from("areas").select("id, nombre");
+    const { data: dataPuestos } = await supabase.from("puestos").select("id, nombre");
+
+    // Combinar los datos manualmente
+    const empleadosCompletos = empleadosRaw.map((e) => ({
+      ...e,
+      area: dataAreas?.find((a) => a.id === e.area_id)?.nombre || "—",
+      puesto: dataPuestos?.find((p) => p.id === e.puesto_id)?.nombre || "—",
+    }));
+
+    setEmpleados(empleadosCompletos);
+  };
+
+  cargarEmpleados();
+}, []);
+
+  // === Registrar empleado ===
   const registrarEmpleado = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMensaje("");
     setCargando(true);
+    setMensaje("");
 
     try {
-      // ✅ Crear usuario con signUp (permite usar desde frontend)
+      // 1️⃣ Crear usuario Auth
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
@@ -75,7 +67,7 @@ export default function RegistrarEmpleado() {
       const nuevoId = signUpData.user?.id;
       if (!nuevoId) throw new Error("No se obtuvo el ID del usuario creado.");
 
-      // ✅ Insertar en empleados
+      // 2️⃣ Insertar empleado
       const { data: empleadoData, error: empleadoError } = await supabase
         .from("empleados")
         .insert([
@@ -84,7 +76,7 @@ export default function RegistrarEmpleado() {
             email,
             nombre,
             area_id: areaId,
-            puesto_id: puestoId || null,
+            puesto_id: puestoId,
             activo: true,
             fecha_ingreso: new Date().toISOString().split("T")[0],
           },
@@ -93,46 +85,111 @@ export default function RegistrarEmpleado() {
         .single();
       if (empleadoError) throw empleadoError;
 
-      // ✅ Insertar rol
-      const { error: rolError } = await supabase.from("roles_app").insert([
-        { empleado_id: empleadoData.id, rol },
-      ]);
+      // 3️⃣ Insertar rol
+      const { error: rolError } = await supabase
+        .from("roles_app")
+        .insert([{ empleado_id: empleadoData.id, rol }]);
       if (rolError) throw rolError;
 
-      setMensaje("✅ Empleado registrado correctamente.");
+      // 4️⃣ Refrescar lista
+      const { data: nuevos } = await supabase
+        .from("empleados")
+        .select(`
+          id, nombre, email, fecha_ingreso, activo, areas(nombre), puestos(nombre)
+        `)
+        .order("nombre");
+      setEmpleados(nuevos || []);
+
+      setMensaje("✅ Empleado agregado correctamente");
+      setMostrarModal(false);
       setNombre("");
       setEmail("");
       setPassword("");
       setAreaId("");
       setPuestoId("");
       setRol("usuario");
-      setPuestos([]);
     } catch (err: any) {
-      console.error("💥 Error al registrar empleado:", err.message);
-      setMensaje("❌ Error al registrar empleado: " + err.message);
+      setMensaje("❌ Error: " + err.message);
     } finally {
       setCargando(false);
     }
   };
 
-  return (
-    <div className="registro-container">
-      <div className="registro-card">
-        <h2 className="registro-title">Gestión de Empleados</h2>
+  // === Eliminar empleado ===
+  const eliminarEmpleado = async (id: string) => {
+    if (!confirm("¿Deseas eliminar este empleado?")) return;
+    const { error } = await supabase.from("empleados").delete().eq("id", id);
+    if (!error) setEmpleados((prev) => prev.filter((e) => e.id !== id));
+  };
 
-        <form onSubmit={registrarEmpleado} className="registro-form-horizontal">
-          <div className="form-grid">
-            <div className="columna">
+  // === Filtrar puestos según área seleccionada ===
+  const puestosFiltrados = puestos.filter((p) => p.area_id === areaId);
+
+  return (
+    <div className="empleados-container">
+      <div className="empleados-header">
+        <h2>👥 Gestión de Empleados</h2>
+        <button className="btn-agregar" onClick={() => setMostrarModal(true)}>
+          + Agregar empleado
+        </button>
+      </div>
+
+      {mensaje && <p className="msg">{mensaje}</p>}
+
+      {/* TABLA */}
+      <div className="tabla-empleados">
+        {empleados.length === 0 ? (
+          <p>No hay empleados registrados.</p>
+        ) : (
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Área</th>
+                <th>Puesto</th>
+                <th>Ingreso</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {empleados.map((e) => (
+                <tr key={e.id}>
+                  <td>{e.nombre}</td>
+                  <td>{e.email}</td>
+                  <td>{e.area}</td>
+                  <td>{e.puesto}</td>
+                  <td>{new Date(e.fecha_ingreso).toLocaleDateString()}</td>
+                  <td>{e.activo ? "Activo" : "Inactivo"}</td>
+                  <td>
+                    <button className="btn-delete" onClick={() => eliminarEmpleado(e.id)}>
+                      🗑️
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {/* MODAL FORMULARIO */}
+      {mostrarModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Registrar nuevo empleado</h3>
+            <form onSubmit={registrarEmpleado}>
               <input
                 type="text"
-                placeholder="Nombre del empleado"
+                placeholder="Nombre completo"
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
                 required
               />
               <input
                 type="email"
-                placeholder="Correo del empleado"
+                placeholder="Correo"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -144,14 +201,8 @@ export default function RegistrarEmpleado() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-            </div>
 
-            <div className="columna">
-              <select
-                value={areaId}
-                onChange={(e) => setAreaId(e.target.value)}
-                required
-              >
+              <select value={areaId} onChange={(e) => setAreaId(e.target.value)} required>
                 <option value="">Selecciona un área</option>
                 {areas.map((a) => (
                   <option key={a.id} value={a.id}>
@@ -163,38 +214,36 @@ export default function RegistrarEmpleado() {
               <select
                 value={puestoId}
                 onChange={(e) => setPuestoId(e.target.value)}
-                disabled={!puestos.length}
                 required
+                disabled={!puestosFiltrados.length}
               >
                 <option value="">
-                  {puestos.length
-                    ? "Selecciona un puesto"
-                    : "Primero selecciona un área"}
+                  {puestosFiltrados.length ? "Selecciona un puesto" : "Primero elige un área"}
                 </option>
-                {puestos.map((p) => (
+                {puestosFiltrados.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.nombre}
                   </option>
                 ))}
               </select>
 
-              <select
-                value={rol}
-                onChange={(e) => setRol(e.target.value as "admin" | "usuario")}
-              >
+              <select value={rol} onChange={(e) => setRol(e.target.value as "admin" | "usuario")}>
                 <option value="usuario">Usuario</option>
                 <option value="admin">Administrador</option>
               </select>
 
-              <button type="submit" disabled={cargando}>
-                {cargando ? "Registrando..." : "Registrar empleado"}
-              </button>
-            </div>
+              <div className="modal-buttons">
+                <button type="submit" disabled={cargando}>
+                  {cargando ? "Registrando..." : "Guardar"}
+                </button>
+                <button type="button" className="cancelar" onClick={() => setMostrarModal(false)}>
+                  Cancelar
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
-
-        {mensaje && <p className="registro-msg">{mensaje}</p>}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -64,7 +64,7 @@ export default function App() {
         setUsuario(email);
         setLogueado(true);
       } else {
-        console.log("🚪 Sesión cerrada");
+        console.log("Sesión cerrada");
         setUsuario("");
         setLogueado(false);
         setRol("");
