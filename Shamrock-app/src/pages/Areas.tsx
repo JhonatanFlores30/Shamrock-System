@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import supabase from "../utils/supabaseClient";
+import { FaEdit, FaTrashAlt, FaSave, FaTimes } from "react-icons/fa";
 import "./Areas.css";
 
 export default function Areas() {
@@ -147,7 +148,7 @@ export default function Areas() {
                 value={descripcion}
                 onChange={(e) => setDescripcion(e.target.value)}
               />
-              <button type="submit" disabled={cargando}>
+              <button type="submit" className="btn btn-primary" disabled={cargando}>
                 {cargando ? "Guardando..." : "Agregar Área"}
               </button>
             </form>
@@ -183,19 +184,11 @@ export default function Areas() {
                       </p>
                     </div>
                     <div className="area-buttons">
-                      <button
-                        className="edit"
-                        style={{ backgroundColor: "#1e88e5" }}
-                        onClick={() => abrirModalEditar(a)}
-                      >
-                        Editar
+                      <button className="btn btn-primary" onClick={() => abrirModalEditar(a)}>
+                        <FaEdit /> Editar
                       </button>
-                      <button
-                        className="delete"
-                        style={{ backgroundColor: "#e53935" }}
-                        onClick={() => eliminarArea(a.id)}
-                      >
-                        Eliminar
+                      <button className="btn btn-danger" onClick={() => eliminarArea(a.id)}>
+                        <FaTrashAlt /> Eliminar
                       </button>
                     </div>
                   </li>
@@ -223,11 +216,13 @@ export default function Areas() {
               placeholder="Nueva descripción"
             />
             <div className="modal-actions">
-              <button onClick={guardarEdicion}>Guardar cambios</button>
-              <button onClick={cerrarModal} className="cancel">
-                Cancelar
-              </button>
-            </div>
+            <button className="btn btn-success" onClick={guardarEdicion}>
+              <FaSave /> Guardar
+            </button>
+            <button className="btn btn-light" onClick={cerrarModal}>
+              <FaTimes /> Cancelar
+            </button>
+          </div>
           </div>
         </div>
       )}

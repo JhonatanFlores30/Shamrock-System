@@ -1,7 +1,7 @@
 .registro-container {
   width: 100%;
   padding: 2rem 3rem;
-  background-color: #f8fafc;
+  background-color: #ffffff;
   min-height: 90vh;
   display: flex;
   justify-content: flex-start; /* Alineado con el sidebar */
@@ -62,26 +62,6 @@ select:focus {
   background: #fff;
 }
 
-/* 💚 Botón verde Shamrock */
-button {
-  background: linear-gradient(135deg, #004d40, #004d40);
-  color: #fff;
-  font-weight: 600;
-  border: none;
-  border-radius: 12px;
-  padding: 0.9rem 1.5rem;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3);
-}
-
-button:hover {
-  background: linear-gradient(135deg, #15803d, #166534);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 14px rgba(21, 128, 61, 0.4);
-}
-
 .registro-msg {
   margin-top: 1.5rem;
   text-align: center;
@@ -125,11 +105,11 @@ button:hover {
   background: white;
   border-radius: 10px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
+  padding:2rem;
 }
 
 .tabla-empleados table {
-  width: 100%;
+  width:100%;
   border-collapse: collapse;
 }
 
@@ -162,6 +142,7 @@ button:hover {
 .empleados-container {
   padding: 2rem 3rem;
   width: 100%;
+  margin-top: -11rem;;
 }
 
 .empleados-header {
@@ -169,27 +150,20 @@ button:hover {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  padding-right:9rem; 
 }
 
 .btn-agregar {
-  background-color: #00796b;
+  background-color: #0373db !important;;
   border: none;
   color: white;
-  padding: 0.8rem 1.2rem;
+  padding: 0.8rem 1.7rem;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
 }
 
-.btn-agregar:hover {
-  background-color: #004d40;
-}
-
-.msg {
-  color: #004d40;
-  font-weight: 500;
-}
 
 .tabla-empleados table {
   width: 100%;
@@ -244,6 +218,7 @@ button:hover {
   width: 90%;
   max-width: 450px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  color: #1f2937; 
 }
 
 .modal h3 {
@@ -252,59 +227,289 @@ button:hover {
   text-align: center;
 }
 
-.modal input,
+.modal input {
+  width: 95%;
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #0a0a0a;
+  color: #0c0c0c;
+}
+
 .modal select {
   width: 100%;
   margin-bottom: 1rem;
   padding: 0.8rem;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #0a0a0a;
+  color: #0c0c0c;
 }
 
 .modal-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;  
+  align-items: center;
+  gap: 1rem;                 
+  margin-top: 1.5rem;
+  width: 100%;
 }
 
 .modal-buttons button {
-  flex: 1;
-  margin: 0 0.5rem;
-  padding: 0.8rem;
+  flex: none;                
+  min-width: 45%;            
+  padding: 0.9rem 1rem;
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  border-radius: 10px;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
+/* Guardar */
 .modal-buttons button[type="submit"] {
-  background-color: #00796b;
+  background: linear-gradient(135deg, #00796b, #004d40);
   color: white;
 }
+.modal-buttons button[type="submit"]:hover {
+  background: linear-gradient(135deg, #004d40, #00695c);
+  transform: translateY(-1px);
+}
 
-.modal-buttons .cancelar {
-  background-color: #ccc;
+/* Cancelar */
+.modal-buttons button.cancelar,
+.modal-buttons button.btn-delete {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+.modal-buttons button.cancelar:hover,
+.modal-buttons button.btn-delete:hover {
+  background-color: #d1d5db;
+}
+
+/* En pantallas pequeñas: apilados verticalmente */
+@media (max-width: 600px) {
+  .modal-buttons {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .modal-buttons button {
+    width: 100%;
+  }
 }
 
 /* === Ajustes de tamaño y escala de la parte derecha === */
 .registro-container,
 .empleados-container,
 .gestion-empleados-container {
-  font-size: 0.95rem; /* 🔹 Cambia el tamaño general de la fuente */
-  transform: scale(0.98); /* 🔹 Reduce o amplía la escala general */
-  transform-origin: top left; /* 🔹 Mantiene alineación con el sidebar */
+  font-size: 0.95rem; 
+  transform: scale(0.98); 
+  transform-origin: top left; 
 }
 
 /* Aumentar la legibilidad de las tablas */
 .tabla-empleados {
-  font-size: rem; /* 🔹 Texto de las tablas un poco más grande */
+  font-size: rem; 
   line-height: 2.8;
 }
 
-/* Para pantallas grandes, hacer que todo se vea más espacioso */
+
 @media (min-width: 1400px) {
   .registro-container,
   .empleados-container {
-    font-size: 1.05rem; /* 🔹 Texto un poco más grande */
-    transform: scale(1.02); /* 🔹 Aumenta levemente la escala */
+    font-size: 1.05rem; 
+    transform: scale(1.05rem); 
+  }
+}
+/* 🎨 Botones de acción en la tabla */
+.acciones {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 🖋️ Botón editar */
+.btn-edit {
+  background-color: #1e88e5;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-edit:hover {
+  background-color: #1565c0;
+  transform: translateY(-1px);
+}
+
+/* 🗑️ Botón eliminar */
+.btn-delete {
+  background-color: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-delete:hover {
+  background-color: #c62828;
+  transform: translateY(-1px);
+}
+
+/* Ajuste del ícono */
+.btn-edit svg,
+.btn-delete svg {
+  font-size: 1.1rem;
+  vertical-align: middle;
+}
+
+/* === 📋 Tabla de empleados con scroll === */
+.tabla-empleados-scroll {
+  margin-top: 2rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  overflow-y: auto;
+  max-height: 450px; /* 🔹 Controla la altura visible */
+}
+
+/* Scroll personalizado */
+.tabla-empleados-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.tabla-empleados-scroll::-webkit-scrollbar-thumb {
+  background-color: #b0bec5;
+  border-radius: 8px;
+}
+.tabla-empleados-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #78909c;
+}
+
+/* Estructura de la tabla */
+.tabla-empleados-scroll table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tabla-empleados-scroll th {
+  background-color: #004d40; /* Verde oscuro institucional */
+  color: white;
+  text-align: left;
+  padding: 0.9rem 1rem;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 2; /* Mantiene el encabezado visible al hacer scroll */
+}
+
+.tabla-empleados-scroll td {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  color: #1f2937;
+}
+
+/* Efecto hover sobre filas */
+.tabla-empleados-scroll tbody tr:hover {
+  background-color: #f5f7f6;
+  transition: 0.2s ease-in-out;
+}
+
+/* Botones dentro de la tabla */
+.acciones {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.btn-edit {
+  background-color: #1e88e5;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+.btn-edit:hover {
+  background-color: #1565c0;
+  transform: translateY(-1px);
+}
+
+.btn-delete {
+  background-color: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+.btn-delete:hover {
+  background-color: #c62828;
+  transform: translateY(-1px);
+}
+
+.btn-edit svg,
+.btn-delete svg {
+  font-size: 1.1rem;
+  vertical-align: middle;
+}
+
+/* === 🔍 Buscador === */
+.acciones-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  padding-right: 1rem;
+}
+
+.buscador-empleados {
+  padding: 0.6rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  width: 230px;
+  background-color: #fff;
+  color: #1f2937;
+  transition: all 0.2s ease;
+}
+
+.buscador-empleados:focus {
+  border-color: #0373db;
+  box-shadow: 0 0 0 3px rgba(3, 115, 219, 0.2);
+  outline: none;
+}
+
+/* Responsive: buscador se apila */
+@media (max-width: 700px) {
+  .acciones-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding-right: 0;
+  }
+
+  .buscador-empleados {
+    width: 100%;
   }
 }

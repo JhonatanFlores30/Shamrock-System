@@ -51,7 +51,71 @@
   box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
   height: fit-content;
 }
+/* 🎨 Botón base general */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Primario (editar) */
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #1e40af, #1d4ed8);
+}
+
+/* Peligro (eliminar) */
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+}
+.btn-danger:hover {
+  background: linear-gradient(135deg, #b91c1c, #991b1b);
+}
+
+/* Éxito (guardar) */
+.btn-success {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  color: #fff;
+}
+.btn-success:hover {
+  background: linear-gradient(135deg, #15803d, #166534);
+}
+
+/* Claro (cancelar) */
+.btn-light {
+  background: #f1f5f9;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+}
+.btn-light:hover {
+  background: #e2e8f0;
+}
+
+/*Responsive (en pantallas pequeñas) */
+@media (max-width: 600px) {
+  .btn {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+}
 .areas-form {
   display: flex;
   flex-direction: column;
@@ -63,7 +127,7 @@
   border-radius: 10px;
 }
 
-/* 📋 Lista de áreas con scroll independiente */
+/* Lista de áreas con scroll independiente */
 .areas-list-section {
   background: #f9fbff;
   border: 1px solid #e0e7ff;
@@ -72,11 +136,11 @@
   box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
   width: 100%;
   height: 100%;
-  max-height: calc(100vh - 220px); /* ajusta según tu header */
-  overflow-y: auto; /* 🟢 Scroll vertical solo aquí */
+  max-height: calc(100vh - 220px); 
+  overflow-y: auto;
   overflow-x: hidden;
   box-sizing: border-box;
-  scrollbar-width: thin; /* Firefox */
+  scrollbar-width: thin; 
 }
 
 /* Personalizar barra de desplazamiento (WebKit) */
@@ -126,7 +190,6 @@
   margin: 0;
 }
 
-/* 🔘 Botones */
 .area-buttons {
   display: flex;
   gap: 0.5rem;
@@ -140,7 +203,7 @@
   }
 
   .areas-list-section {
-    max-height: none; /* en móvil, scroll global */
+    max-height: none; 
   }
 
   .areas-card-horizontal {
@@ -196,4 +259,18 @@
   font-size: 0.9rem;
   font-weight: 600;
   margin-top: 0.4rem;
+}
+/* === Estilo de botones con íconos === */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;          /* 🔹 Espacio entre ícono y texto */
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+}
+
+.btn svg {
+  font-size: 1.1rem;   /* 🔹 Tamaño visualmente balanceado */
+  vertical-align: middle;
 }
