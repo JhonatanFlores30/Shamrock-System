@@ -27,7 +27,7 @@
   margin-bottom: 2rem;
 }
 
-/* 🧱 Formulario horizontal */
+/*Formulario horizontal */
 .registro-form-horizontal {
   width: 100%;
 }
@@ -320,7 +320,7 @@ select:focus {
     transform: scale(1.05rem); 
   }
 }
-/* 🎨 Botones de acción en la tabla */
+/*Botones de acción en la tabla */
 .acciones {
   display: flex;
   gap: 0.6rem;
@@ -328,7 +328,7 @@ select:focus {
   align-items: center;
 }
 
-/* 🖋️ Botón editar */
+/* Botón editar */
 .btn-edit {
   background-color: #1e88e5;
   color: #fff;
@@ -346,7 +346,7 @@ select:focus {
   transform: translateY(-1px);
 }
 
-/* 🗑️ Botón eliminar */
+/* Botón eliminar */
 .btn-delete {
   background-color: #e53935;
   color: #fff;
@@ -371,7 +371,7 @@ select:focus {
   vertical-align: middle;
 }
 
-/* === 📋 Tabla de empleados con scroll === */
+/* ===Tabla de empleados con scroll === */
 .tabla-empleados-scroll {
   margin-top: 2rem;
   background: white;
@@ -379,7 +379,7 @@ select:focus {
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
   padding: 1rem;
   overflow-y: auto;
-  max-height: 450px; /* 🔹 Controla la altura visible */
+  max-height: 450px; 
 }
 
 /* Scroll personalizado */
@@ -403,14 +403,14 @@ select:focus {
 }
 
 .tabla-empleados-scroll th {
-  background-color: #004d40; /* Verde oscuro institucional */
+  background-color: #004d40;
   color: white;
   text-align: left;
   padding: 0.9rem 1rem;
   font-weight: 600;
   position: sticky;
   top: 0;
-  z-index: 2; /* Mantiene el encabezado visible al hacer scroll */
+  z-index: 2; 
 }
 
 .tabla-empleados-scroll td {

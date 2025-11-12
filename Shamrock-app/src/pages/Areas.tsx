@@ -22,7 +22,7 @@ export default function Areas() {
   const [nombreEditado, setNombreEditado] = useState("");
   const [descripcionEditada, setDescripcionEditada] = useState("");
 
-  // 🔹 Cargar áreas con conteo
+  // Cargar áreas con conteo
   useEffect(() => {
     const obtenerAreas = async () => {
       setCargando(true);
@@ -32,8 +32,8 @@ export default function Areas() {
         .order("nombre", { ascending: true });
 
       if (error) {
-        console.error("💥 Error al obtener áreas:", error.message);
-        setMensaje("❌ No se pudieron cargar las áreas.");
+        console.error("Error al obtener áreas:", error.message);
+        setMensaje("No se pudieron cargar las áreas.");
       } else {
         setAreas(data || []);
       }
@@ -50,7 +50,7 @@ export default function Areas() {
       (a.descripcion && a.descripcion.toLowerCase().includes(busqueda.toLowerCase()))
   );
 
-  // 🔹 Agregar nueva área
+  //  Agregar nueva área
   const agregarArea = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!nuevaArea.trim()) return;
@@ -64,7 +64,7 @@ export default function Areas() {
 
       if (error) throw error;
 
-      setMensaje("✅ Área registrada correctamente.");
+      setMensaje("Área registrada correctamente.");
       setNuevaArea("");
       setDescripcion("");
 
@@ -72,7 +72,7 @@ export default function Areas() {
       const { data: nuevaLista } = await supabase.from("areas_con_conteo").select("*");
       setAreas(nuevaLista || []);
     } catch (err: any) {
-      setMensaje("❌ No se pudo registrar el área: " + err.message);
+      setMensaje("No se pudo registrar el área: " + err.message);
     } finally {
       setCargando(false);
     }
@@ -101,7 +101,7 @@ export default function Areas() {
       const { data: nuevaLista } = await supabase.from("areas_con_conteo").select("*");
       setAreas(nuevaLista || []);
     } catch (err: any) {
-      setMensaje("❌ No se pudo editar el área: " + err.message);
+      setMensaje("No se pudo editar el área: " + err.message);
     }
   };
 
@@ -154,7 +154,7 @@ export default function Areas() {
             </form>
           </div>
 
-          {/* 📜 Lista con buscador */}
+          {/* Lista con buscador */}
           <div className="areas-list-section">
             <h3 className="section-title">Áreas registradas</h3>
 
@@ -199,7 +199,7 @@ export default function Areas() {
         </div>
       </div>
 
-      {/* 🪟 Modal */}
+      {/* Modal */}
       {editando && (
         <div className="modal-overlay">
           <div className="modal">

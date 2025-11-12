@@ -27,7 +27,7 @@ export default function Usuario({ user, onLogout }: { user: string; onLogout: ()
   }, []);
 
   // Cargar datos del empleado con área y puesto
-// 🔹 Cargar datos del empleado desde la función RPC
+// Cargar datos del empleado desde la función RPC
 useEffect(() => {
   const cargarDatos = async () => {
     try {
@@ -48,7 +48,7 @@ useEffect(() => {
       if (recompensasError) throw recompensasError;
       setRecompensas(recompensasData || []);
     } catch (err: any) {
-      console.error("💥 Error cargando datos:", err.message);
+      console.error("Error cargando datos:", err.message);
     } finally {
       setLoading(false);
     }

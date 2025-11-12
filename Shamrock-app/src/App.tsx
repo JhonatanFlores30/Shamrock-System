@@ -40,13 +40,13 @@ export default function App() {
           setUsuario(email);
           setLogueado(true);
         } else {
-          console.log("🚫 Sin sesión activa");
+          console.log("Sin sesión activa");
           setUsuario("");
           setLogueado(false);
           setRol("");
         }
       } catch (e) {
-        console.error("💥 Error verificando sesión:", e);
+        console.error("Error verificando sesión:", e);
         setUsuario("");
         setLogueado(false);
         setRol("");
@@ -114,7 +114,7 @@ export default function App() {
         }
 
         if (!empleado.activo) {
-          console.warn("⛔ Empleado inactivo");
+          console.warn("Empleado inactivo");
           await supabase.auth.signOut();
           setLogueado(false);
           return;
@@ -130,7 +130,7 @@ export default function App() {
         if (rolError) throw rolError;
 
         const rolEncontrado = (rolData?.rol as Rol) || "usuario";
-        console.log("✅ Rol encontrado:", rolEncontrado);
+        console.log("Rol encontrado:", rolEncontrado);
         if (mounted) setRol(rolEncontrado);
       } catch (err: any) {
         console.error("💥 Error cargando rol:", err.message);

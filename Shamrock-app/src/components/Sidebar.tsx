@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { FaHome, FaUsers, FaChartBar, FaCog, FaSignOutAlt } from "react-icons/fa";
+import "./Siderbar.css";
 
 interface SidebarProps {
   user: string;

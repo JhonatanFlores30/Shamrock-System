@@ -53,7 +53,7 @@ export default function GestionEmpleados() {
 
     try {
       if (modoEdicion && empleadoIdEditando) {
-        // ✏️ Actualizar empleado existente
+        // Actualizar empleado existente
         const { error } = await supabase
           .from("empleados")
           .update({
@@ -176,7 +176,7 @@ export default function GestionEmpleados() {
     </div>
 
     {mensaje && <p className="msg">{mensaje}</p>}
-    
+
     <div className="tabla-empleados-scroll">
       {empleadosFiltrados.length === 0 ? (
         <p>No se encontraron empleados.</p>

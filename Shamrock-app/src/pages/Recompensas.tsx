@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import supabase from "../utils/supabaseClient";
-import "./Empleados.css";
+import "./Recompensas.css";
 
 export default function Usuarios() {
   const [empleados, setEmpleados] = useState<any[]>([]);
   const [cargando, setCargando] = useState(true);
 
-  // 🔹 Cargar lista de empleados
+  //Cargar lista de empleados
   useEffect(() => {
     const cargarEmpleados = async () => {
       try {
@@ -26,7 +26,7 @@ export default function Usuarios() {
         if (error) throw error;
         setEmpleados(data || []);
       } catch (err: any) {
-        console.error("💥 Error al cargar empleados:", err.message);
+        console.error("Error al cargar empleados:", err.message);
       } finally {
         setCargando(false);
       }
