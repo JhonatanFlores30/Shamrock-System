@@ -6,7 +6,6 @@ import Login from "./components/Login";
 import Sidebar from "./components/Sidebar";
 import Usuario from "./components/Usuario";
 import Inicio from "./pages/Inicio";
-import Empleados from "./pages/Empleados";
 import Areas from "./pages/Areas";
 import RegistrarEmpleado from "./pages/RegistrarEmpleado";
 import "./App.css";
@@ -211,7 +210,6 @@ export default function App() {
         <main className="contenido">
           <Routes>
             <Route path="/Inicio" element={<Inicio />} />
-            <Route path="/empleado" element={<Empleados />} />
             <Route path="/registrar" element={<RegistrarEmpleado />} />
             <Route path="/gestionareas" element={<Areas />} />
             <Route path="*" element={<Navigate to="/Inicio" replace />} />
