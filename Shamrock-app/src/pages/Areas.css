@@ -1,4 +1,4 @@
-/* 🌐 Contenedor principal (estirado a todo el ancho) */
+
 .areas-wrapper {
   display: flex;
   justify-content: flex-start; 
@@ -38,7 +38,7 @@
   align-items: flex-start;
 }
 
-/* Formulario */
+
 .areas-form-section {
   background: #f9fbff;
   border: 1px solid #e0e7ff;
@@ -47,7 +47,7 @@
   box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
   height: fit-content;
 }
-/* Botón base general */
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -68,7 +68,7 @@
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* Primario (editar) */
+
 .btn-primary {
   background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: #fff;
@@ -77,7 +77,7 @@
   background: linear-gradient(135deg, #1e40af, #1d4ed8);
 }
 
-/* Peligro (eliminar) */
+
 .btn-danger {
   background: linear-gradient(135deg, #ef4444, #dc2626);
   color: #fff;
@@ -86,7 +86,7 @@
   background: linear-gradient(135deg, #b91c1c, #991b1b);
 }
 
-/* Éxito (guardar) */
+
 .btn-success {
   background: linear-gradient(135deg, #16a34a, #15803d);
   color: #fff;
@@ -95,7 +95,7 @@
   background: linear-gradient(135deg, #15803d, #166534);
 }
 
-/* Claro (cancelar) */
+
 .btn-light {
   background: #f1f5f9;
   color: #1e293b;
@@ -105,7 +105,7 @@
   background: #e2e8f0;
 }
 
-/*Responsive (en pantallas pequeñas) */
+
 @media (max-width: 600px) {
   .btn {
     width: 100%;
@@ -123,7 +123,7 @@
   border-radius: 10px;
 }
 
-/* Lista de áreas con scroll independiente */
+
 .areas-list-section {
   background: #f9fbff;
   border: 1px solid #e0e7ff;
@@ -139,7 +139,7 @@
   scrollbar-width: thin; 
 }
 
-/* Personalizar barra de desplazamiento (WebKit) */
+
 .areas-list-section::-webkit-scrollbar {
   width: 8px;
 }
@@ -270,4 +270,81 @@
 .btn svg {
   font-size: 1.1rem; 
   vertical-align: middle;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal {
+  background: #ffffff;
+  padding: 2rem 2.5rem;
+  border-radius: 18px;
+  width: 420px;
+  max-width: 95%;
+  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.15);
+  animation: modalPop 0.35s ease;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal h3 {
+  font-size: 1.4rem;
+  color: #004d40;
+  margin-bottom: 1.2rem;
+  text-align: center;
+}
+
+.modal input,
+.modal textarea {
+  width: 85%;       
+  margin: 0 auto 1rem; 
+  display: block;
+
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #c6c6c6;
+  font-size: 1rem;
+  background: #f7f9fc;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.modal input:focus,
+.modal textarea:focus {
+  border-color: #00796b;
+  box-shadow: 0 0 8px rgba(0, 121, 107, 0.3);
+  background: #ffffff;
+}
+
+/* Botones centrados */
+.modal-actions {
+  width: 85%;             
+  display: flex;
+  justify-content: center; 
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.modal-actions .btn {
+  flex: 1;
+  padding: 12px 0;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
 }

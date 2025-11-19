@@ -5,6 +5,7 @@ import supabase from "./utils/supabaseClient";
 import Login from "./components/Login";
 import Sidebar from "./components/Sidebar";
 import Usuario from "./components/Usuario";
+import Recompensas from "./pages/Recompensas";
 import Inicio from "./pages/Inicio";
 import Areas from "./pages/Areas";
 import RegistrarEmpleado from "./pages/RegistrarEmpleado";
@@ -16,30 +17,27 @@ export default function App() {
   const [logueado, setLogueado] = useState(false);
   const [usuario, setUsuario] = useState<string>("");
   const [rol, setRol] = useState<Rol | "">("");
+
   const [cargandoSesion, setCargandoSesion] = useState(true);
   const [cargandoRol, setCargandoRol] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  // === 1️⃣ Verificar sesión inicial y cambios ===
+
   useEffect(() => {
     let mounted = true;
 
     const cargarSesion = async () => {
       try {
-        const { data, error } = await supabase.auth.getSession();
-        if (error) throw error;
-
+        const { data } = await supabase.auth.getSession();
         const session = data.session;
+
         if (session?.user?.email) {
-          const email = session.user.email.trim();
-          console.log("✅ Sesión detectada:", email);
           if (!mounted) return;
-          setUsuario(email);
+          setUsuario(session.user.email.trim());
           setLogueado(true);
         } else {
-          console.log("Sin sesión activa");
           setUsuario("");
           setLogueado(false);
           setRol("");
@@ -48,7 +46,6 @@ export default function App() {
         console.error("Error verificando sesión:", e);
         setUsuario("");
         setLogueado(false);
-        setRol("");
       } finally {
         if (mounted) setCargandoSesion(false);
       }
@@ -56,81 +53,84 @@ export default function App() {
 
     cargarSesion();
 
-    const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log("📡 Evento de sesión:", event);
-      if (session?.user?.email) {
-        const email = session.user.email.trim();
-        setUsuario(email);
-        setLogueado(true);
-      } else {
-        console.log("Sesión cerrada");
-        setUsuario("");
-        setLogueado(false);
-        setRol("");
-      }
-    });
 
-    const sub = listener?.subscription;
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        console.log("📡 Evento de sesión:", event);
+
+        if (session?.user?.email) {
+          const email = session.user.email.trim();
+
+          // 🔥 FIX: permitir que empleados y roles_app terminen de insertarse
+          await new Promise((r) => setTimeout(r, 600));
+
+          setUsuario(email);
+          setLogueado(true);
+        } else {
+          setUsuario("");
+          setLogueado(false);
+          setRol("");
+        }
+      }
+    );
+
     return () => {
       mounted = false;
-      sub?.unsubscribe();
+      listener?.subscription?.unsubscribe();
     };
   }, []);
 
-  // Cargar rol real desde empleados + roles_app ===
+
   useEffect(() => {
+    if (!logueado) return;
+
     let mounted = true;
+
     const obtenerRol = async () => {
-      if (!logueado) return;
       setCargandoRol(true);
 
       try {
-        //Obtener usuario actual
-        const { data: sessionData, error: sessionError } = await supabase.auth.getUser();
-        if (sessionError) throw sessionError;
+        // Obtener usuario actual
+        const { data: sessionData } = await supabase.auth.getUser();
         const userId = sessionData?.user?.id;
 
         if (!userId) {
-          console.warn("⚠️ No se encontró ID de usuario en la sesión.");
+          console.warn("No hay ID de usuario en sesión.");
           await supabase.auth.signOut();
           return;
         }
 
-        // Buscar empleado asociado
-        const { data: empleado, error: empError } = await supabase
+        // Buscar en empleados
+        const { data: empleado } = await supabase
           .from("empleados")
-          .select("id, nombre, activo")
+          .select("id, activo")
           .eq("auth_user_id", userId)
           .maybeSingle();
 
-        if (empError) throw empError;
-
         if (!empleado) {
-          console.warn("⚠️ No existe el empleado en la tabla 'empleados'");
+          console.warn("Empleado no encontrado.");
           await supabase.auth.signOut();
-          setLogueado(false);
           return;
         }
 
         if (!empleado.activo) {
-          console.warn("Empleado inactivo");
+          console.warn("⚠️ Empleado INACTIVO");
           await supabase.auth.signOut();
-          setLogueado(false);
           return;
         }
 
-        //Buscar rol asociado
-        const { data: rolData, error: rolError } = await supabase
+        // Buscar rol
+        const { data: rolData } = await supabase
           .from("roles_app")
           .select("rol")
           .eq("empleado_id", empleado.id)
           .maybeSingle();
 
-        if (rolError) throw rolError;
-
         const rolEncontrado = (rolData?.rol as Rol) || "usuario";
-        console.log("Rol encontrado:", rolEncontrado);
-        if (mounted) setRol(rolEncontrado);
+
+        if (mounted) {
+          setRol(rolEncontrado);
+        }
       } catch (err: any) {
         console.error("💥 Error cargando rol:", err.message);
         if (mounted) setRol("");
@@ -140,26 +140,28 @@ export default function App() {
     };
 
     obtenerRol();
+
     return () => {
       mounted = false;
     };
   }, [logueado]);
 
-  // ===Redirección según rol ===
+
   useEffect(() => {
     if (!logueado || !rol) return;
+
     if (location.pathname === "/" || location.pathname === "/login") {
       if (rol === "admin") navigate("/Inicio", { replace: true });
       else navigate("/usuario", { replace: true });
     }
-  }, [logueado, rol]);
+  }, [rol, logueado]);
 
-  // === 4render ===
 
   if (cargandoSesion) {
     return (
-      <div className="loader">
-        <h2>Verificando sesión...</h2>
+      <div className="loader-center-screen">
+        <img src="/sham.jpg" className="logo-spin" />
+        <h2>Cargando...</h2>
       </div>
     );
   }
@@ -175,31 +177,30 @@ export default function App() {
 
   if (cargandoRol && !rol) {
     return (
-      <div className="loader">
-        <h2>Cargando permisos...</h2>
+      <div className="loader-center-screen">
+        <img src="/sham.jpg" className="logo-spin" />
+        <h2>Cargando....</h2>
       </div>
     );
   }
 
-  // === Usuario normal ===
   if (rol === "usuario") {
     return (
-      <Routes>
+      <Routes> 
         <Route
           path="/usuario"
           element={
             <Usuario
               user={usuario}
-              onLogout={async () => await supabase.auth.signOut()}
+              onLogout={async () => void supabase.auth.signOut()}
             />
           }
         />
-        <Route path="*" element={<Navigate to="/Usuario" replace />} />
+        <Route path="*" element={<Navigate to="/usuario" replace />} />
       </Routes>
     );
   }
 
-  // === Administrador ===
   if (rol === "admin") {
     return (
       <div className="app-container">
@@ -210,6 +211,7 @@ export default function App() {
         <main className="contenido">
           <Routes>
             <Route path="/Inicio" element={<Inicio />} />
+            <Route path="/recompensas" element={<Recompensas/>} />
             <Route path="/registrar" element={<RegistrarEmpleado />} />
             <Route path="/gestionareas" element={<Areas />} />
             <Route path="*" element={<Navigate to="/Inicio" replace />} />
@@ -219,8 +221,7 @@ export default function App() {
     );
   }
 
-  // === Si todo falla, forzar logout ===
   console.warn("⚠️ Rol no reconocido, cerrando sesión.");
-  void supabase.auth.signOut();
+  supabase.auth.signOut();
   return <Navigate to="/" replace />;
 }

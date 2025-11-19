@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import supabase from "../utils/supabaseClient";
-import { FaEdit, FaTrashAlt, FaSave, FaTimes } from "react-icons/fa";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import "./RegistrarEmpleado.css";
 
 export default function GestionEmpleados() {
@@ -21,7 +21,6 @@ export default function GestionEmpleados() {
   const [empleadoIdEditando, setEmpleadoIdEditando] = useState<string | null>(null);
   const [cargando, setCargando] = useState(false);
 
-  // === Cargar datos ===
   useEffect(() => {
     const cargarDatos = async () => {
       const { data: empleadosRaw } = await supabase.from("empleados").select("*").order("nombre");
@@ -42,7 +41,6 @@ export default function GestionEmpleados() {
     cargarDatos();
   }, []);
 
-  // === Filtrar puestos según el área seleccionada ===
   const puestosFiltrados = puestos.filter((p) => p.area_id === areaId);
 
   // === Registrar o editar empleado ===
@@ -53,7 +51,6 @@ export default function GestionEmpleados() {
 
     try {
       if (modoEdicion && empleadoIdEditando) {
-        // Actualizar empleado existente
         const { error } = await supabase
           .from("empleados")
           .update({
@@ -68,7 +65,6 @@ export default function GestionEmpleados() {
 
         setMensaje("✏️ Empleado actualizado correctamente.");
       } else {
-        // ➕ Registrar nuevo empleado
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
@@ -104,18 +100,35 @@ export default function GestionEmpleados() {
         setMensaje("✅ Empleado agregado correctamente.");
       }
 
-      // 🔄 Refrescar lista
       const { data: nuevos } = await supabase
         .from("empleados")
         .select("*")
         .order("nombre");
-      setEmpleados(nuevos || []);
 
+      setEmpleados(nuevos || []);
       cerrarModal();
     } catch (err: any) {
       setMensaje("❌ Error: " + err.message);
     } finally {
       setCargando(false);
+    }
+  };
+
+  // === Activar / Inactivar Empleado ===
+  const toggleEstadoEmpleado = async (id: string, estadoActual: boolean) => {
+    const nuevoEstado = !estadoActual;
+
+    const { error } = await supabase
+      .from("empleados")
+      .update({ activo: nuevoEstado })
+      .eq("id", id);
+
+    if (!error) {
+      setEmpleados((prev) =>
+        prev.map((emp) =>
+          emp.id === id ? { ...emp, activo: nuevoEstado } : emp
+        )
+      );
     }
   };
 
@@ -126,7 +139,6 @@ export default function GestionEmpleados() {
     if (!error) setEmpleados((prev) => prev.filter((e) => e.id !== id));
   };
 
-  // === Abrir modal en modo edición ===
   const abrirModalEdicion = (empleado: any) => {
     setModoEdicion(true);
     setEmpleadoIdEditando(empleado.id);
@@ -134,7 +146,7 @@ export default function GestionEmpleados() {
     setEmail(empleado.email);
     setAreaId(empleado.area_id);
     setPuestoId(empleado.puesto_id);
-    setRol("usuario"); // o podrías cargar el rol real desde la tabla roles_app
+    setRol("usuario");
     setMostrarModal(true);
   };
 
@@ -149,80 +161,115 @@ export default function GestionEmpleados() {
     setPuestoId("");
     setRol("usuario");
   };
-    const [busqueda, setBusqueda] = useState("");
 
-    const empleadosFiltrados = empleados.filter((e) =>
-      [e.nombre, e.email, e.area, e.puesto]
-        .join(" ")
-        .toLowerCase()
-        .includes(busqueda.toLowerCase())
-    );
+  const [busqueda, setBusqueda] = useState("");
+
+  const empleadosFiltrados = empleados.filter((e) =>
+    [e.nombre, e.email, e.area, e.puesto]
+      .join(" ")
+      .toLowerCase()
+      .includes(busqueda.toLowerCase())
+  );
+
+  // Bloquear scroll al abrir modal
+  useEffect(() => {
+    document.body.style.overflow = mostrarModal ? "hidden" : "auto";
+  }, [mostrarModal]);
+
   return (
     <div className="empleados-container">
-    <div className="empleados-header">
-      <h2>👥 Gestión de Empleados</h2>
-      <div className="acciones-header">
-        <input
-          type="text"
-          placeholder="🔍 Buscar empleado..."
-          className="buscador-empleados"
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-        />
-        <button className="btn-agregar" onClick={() => setMostrarModal(true)}>
-          + Agregar empleado
-        </button>
+      <div className="empleados-header">
+        <h2>👥 Gestión de Empleados</h2>
+
+        <div className="acciones-header">
+          <input
+            type="text"
+            placeholder="🔍 Buscar empleado..."
+            className="buscador-empleados"
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+          />
+
+          <button className="btn-agregar" onClick={() => setMostrarModal(true)}>
+            + Agregar empleado
+          </button>
+        </div>
       </div>
-    </div>
 
-    {mensaje && <p className="msg">{mensaje}</p>}
+      {mensaje && <p className="msg">{mensaje}</p>}
 
-    <div className="tabla-empleados-scroll">
-      {empleadosFiltrados.length === 0 ? (
-        <p>No se encontraron empleados.</p>
-      ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Área</th>
-              <th>Puesto</th>
-              <th>Ingreso</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {empleadosFiltrados.map((e) => (
-              <tr key={e.id}>
-                <td>{e.nombre}</td>
-                <td>{e.email}</td>
-                <td>{e.area}</td>
-                <td>{e.puesto}</td>
-                <td>{new Date(e.fecha_ingreso).toLocaleDateString()}</td>
-                <td>{e.activo ? "Activo" : "Inactivo"}</td>
-                <td className="acciones">
-                  <button className="btn-edit" onClick={() => abrirModalEdicion(e)}>
-                    <FaEdit />
-                  </button>
-                  <button className="btn-delete" onClick={() => eliminarEmpleado(e.id)}>
-                    <FaTrashAlt />
-                  </button>
-                </td>
+      {/* === TABLA === */}
+      <div className="tabla-empleados-scroll">
+        {empleadosFiltrados.length === 0 ? (
+          <p>No se encontraron empleados.</p>
+        ) : (
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Área</th>
+                <th>Puesto</th>
+                <th>Ingreso</th>
+                <th>Estado</th>
+                <th>Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
+            </thead>
 
-      {/* MODAL FORMULARIO */}
+            <tbody>
+              {empleadosFiltrados.map((e) => (
+                <tr key={e.id}>
+                  <td>{e.nombre}</td>
+                  <td>{e.email}</td>
+                  <td>{e.area}</td>
+                  <td>{e.puesto}</td>
+                  <td>{new Date(e.fecha_ingreso).toLocaleDateString()}</td>
+
+                  <td>
+                    {e.activo ? (
+                      <span style={{ color: "green", fontWeight: "600" }}>
+                        Activo
+                      </span>
+                    ) : (
+                      <span style={{ color: "gray", fontWeight: "600" }}>
+                        Inactivo
+                      </span>
+                    )}
+                  </td>
+
+                  <td className="acciones">
+                    <button className="btn-edit" onClick={() => abrirModalEdicion(e)}>
+                      <FaEdit />
+                    </button>
+
+                    <button
+                      className="btn-toggle"
+                      onClick={() => toggleEstadoEmpleado(e.id, e.activo)}
+                    >
+                      {e.activo ? "Inactivar" : "Activar"}
+                    </button>
+
+                    <button className="btn-delete" onClick={() => eliminarEmpleado(e.id)}>
+                      <FaTrashAlt />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+
+          </table>
+        )}
+      </div>
+
+      {/* === MODAL === */}
       {mostrarModal && (
         <div className="modal-overlay">
           <div className="modal">
             <h3>{modoEdicion ? "Editar empleado" : "Registrar nuevo empleado"}</h3>
+
             <form onSubmit={guardarEmpleado}>
+
+              <label className="form-label">Nombre completo:</label>
               <input
                 type="text"
                 placeholder="Nombre completo"
@@ -230,6 +277,8 @@ export default function GestionEmpleados() {
                 onChange={(e) => setNombre(e.target.value)}
                 required
               />
+              
+              <label className="form-label">Correo:</label>
               <input
                 type="email"
                 placeholder="Correo"
@@ -238,6 +287,7 @@ export default function GestionEmpleados() {
                 required
               />
 
+              <label className="form-label">Contraseña temporal:</label>
               {!modoEdicion && (
                 <input
                   type="password"
@@ -273,6 +323,7 @@ export default function GestionEmpleados() {
                 ))}
               </select>
 
+              <label className="form-label">Tipo de usuario:</label>
               <select value={rol} onChange={(e) => setRol(e.target.value as "admin" | "usuario")}>
                 <option value="usuario">Usuario</option>
                 <option value="admin">Administrador</option>
@@ -286,6 +337,7 @@ export default function GestionEmpleados() {
                     ? "Guardar cambios"
                     : "Registrar empleado"}
                 </button>
+
                 <button type="button" className="btn-delete" onClick={cerrarModal}>
                   Cancelar
                 </button>

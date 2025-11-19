@@ -27,7 +27,6 @@ export default function Usuario({ user, onLogout }: { user: string; onLogout: ()
   }, []);
 
   // Cargar datos del empleado con área y puesto
-// Cargar datos del empleado desde la función RPC
 useEffect(() => {
   const cargarDatos = async () => {
     try {
