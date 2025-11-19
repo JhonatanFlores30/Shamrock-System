@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import supabase from "../utils/supabaseClient";
-import { FaEdit, FaTrashAlt, FaGift, FaPlus } from "react-icons/fa";
+import { FaEdit, FaTrashAlt, FaGift, FaPlus, FaSearch } from "react-icons/fa";
 import "./Recompensas.css";
 
 export default function Recompensas() {
@@ -8,6 +8,10 @@ export default function Recompensas() {
   const [categorias, setCategorias] = useState<any[]>([]);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [modoEdicion, setModoEdicion] = useState(false);
+
+  // Filtros
+  const [busqueda, setBusqueda] = useState("");
+  const [categoriaActiva, setCategoriaActiva] = useState("todas");
 
   // Formulario
   const [titulo, setTitulo] = useState("");
@@ -62,7 +66,6 @@ export default function Recompensas() {
     setMostrarModal(true);
   };
 
-
   const limpiarFormulario = () => {
     setTitulo("");
     setClave("");
@@ -77,25 +80,20 @@ export default function Recompensas() {
   const guardarRecompensa = async (e: any) => {
     e.preventDefault();
 
-    let imagenUrl = preview; 
+    let imagenUrl = preview;
 
     if (imagen) {
       const nombre = `imagenes/rec_${Date.now()}_${imagen.name}`;
 
-
       const { error: uploadError } = await supabase.storage
         .from("recompensas")
-        .upload(nombre, imagen, {
-          upsert: false, 
-        });
+        .upload(nombre, imagen, { upsert: false });
 
-    if (uploadError) {
-      console.error("ERROR STORAGE:", uploadError);
-      alert("Error subiendo imagen: " + uploadError.message);
-      return;
-    }
+      if (uploadError) {
+        alert("Error subiendo imagen");
+        return;
+      }
 
-      // Obtener URL pública
       const { data } = supabase.storage
         .from("recompensas")
         .getPublicUrl(nombre);
@@ -111,7 +109,7 @@ export default function Recompensas() {
       puntos_costo: puntos,
       stock: stock === null ? null : Number(stock),
       imagen_url: imagenUrl,
-      activo: true
+      activo: true,
     };
 
     if (modoEdicion && recompensaIdEditando) {
@@ -132,25 +130,76 @@ export default function Recompensas() {
   };
 
   const toggleEstado = async (r: any) => {
-    await supabase
-      .from("recompensas")
-      .update({ activo: !r.activo })
-      .eq("id", r.id);
-
+    await supabase.from("recompensas").update({ activo: !r.activo }).eq("id", r.id);
     cargarDatos();
   };
 
+  // ---------------------------
+  // FILTROS (pestaña + buscador)
+  // ---------------------------
+
+  const recompensasFiltradas = recompensas
+    .filter((r) =>
+      categoriaActiva === "todas"
+        ? true
+        : r.categoria_id === categoriaActiva
+    )
+    .filter((r) =>
+      r.titulo.toLowerCase().includes(busqueda.toLowerCase()) ||
+      r.clave.toLowerCase().includes(busqueda.toLowerCase()) ||
+      (r.categoria?.nombre || "").toLowerCase().includes(busqueda.toLowerCase())
+    );
+
   return (
     <div className="recompensas-container">
+
+      {/* ================= HEADER ================= */}
       <div className="header">
         <h2><FaGift /> Gestión de Recompensas</h2>
+
         <button className="btn-agregar" onClick={abrirModalNueva}>
           <FaPlus /> Agregar recompensa
         </button>
       </div>
 
+      {/* ================= TABS + BUSCADOR ================= */}
+<div className="tabs-buscador-container">
+
+  {/* PESTAÑAS */}
+  <div className="tabs">
+    <button
+      className={categoriaActiva === "todas" ? "tab active" : "tab"}
+      onClick={() => setCategoriaActiva("todas")}
+    >
+      Todas
+    </button>
+
+    {categorias.map((c) => (
+      <button
+        key={c.id}
+        className={categoriaActiva === c.id ? "tab active" : "tab"}
+        onClick={() => setCategoriaActiva(c.id)}
+      >
+        {c.nombre}
+      </button>
+    ))}
+  </div>
+
+  {/* BUSCADOR */}
+  <div className="buscador">
+    <FaSearch className="icono-buscar" />
+    <input
+      type="text"
+      placeholder="Buscar recompensa..."
+      value={busqueda}
+      onChange={(e) => setBusqueda(e.target.value)}
+    />
+  </div>
+
+</div>
+
       {/* ================= TABLA ================= */}
-      <div className="tabla">
+      <div className="tabla tabla-scroll">
         <table>
           <thead>
             <tr>
@@ -166,14 +215,12 @@ export default function Recompensas() {
           </thead>
 
           <tbody>
-            {recompensas.map((r) => (
+            {recompensasFiltradas.map((r) => (
               <tr key={r.id}>
                 <td>
                   {r.imagen_url ? (
                     <img src={r.imagen_url} className="img-recompensa" />
-                  ) : (
-                    "—"
-                  )}
+                  ) : "—"}
                 </td>
 
                 <td>{r.titulo}</td>
@@ -189,10 +236,14 @@ export default function Recompensas() {
                 </td>
 
                 <td className="acciones">
-                  <button className="btn-edit" onClick={() => abrirModalEditar(r)}><FaEdit /></button>
+                  <button className="btn-edit" onClick={() => abrirModalEditar(r)}>
+                    <FaEdit />
+                  </button>
+
                   <button className="btn-toggle" onClick={() => toggleEstado(r)}>
                     {r.activo ? "Inactivar" : "Activar"}
                   </button>
+
                   <button className="btn-delete" onClick={() => eliminarRecompensa(r.id)}>
                     <FaTrashAlt />
                   </button>
@@ -204,20 +255,21 @@ export default function Recompensas() {
         </table>
       </div>
 
+      {/* ================= MODAL ================= */}
       {mostrarModal && (
         <div className="modal-overlay">
           <div className="modal">
             <h3>{modoEdicion ? "Editar Recompensa" : "Nueva Recompensa"}</h3>
 
-          <form onSubmit={guardarRecompensa} className="form-grid">
+            <form onSubmit={guardarRecompensa} className="form-grid">
               
               <div className="form-group">
-                <label className="form-label">Título de la recompensa</label>
+                <label className="form-label">Título</label>
                 <input value={titulo} onChange={(e) => setTitulo(e.target.value)} required />
               </div>
 
               <div className="form-group">
-                <label className="form-label">Clave interna</label>
+                <label className="form-label">Clave</label>
                 <input value={clave} onChange={(e) => setClave(e.target.value)} required />
               </div>
 
@@ -232,7 +284,7 @@ export default function Recompensas() {
               </div>
 
               <div className="form-group">
-                <label className="form-label">Puntos necesarios</label>
+                <label className="form-label">Puntos</label>
                 <input type="number" value={puntos} onChange={(e) => setPuntos(Number(e.target.value))} required />
               </div>
 
@@ -243,7 +295,9 @@ export default function Recompensas() {
 
               <div className="form-group">
                 <label className="form-label">Stock</label>
-                <input type="number" value={stock ?? ""} onChange={(e) => setStock(e.target.value === "" ? null : Number(e.target.value))} />
+                <input type="number" value={stock ?? ""} onChange={(e) =>
+                  setStock(e.target.value === "" ? null : Number(e.target.value))
+                } />
               </div>
 
               <div className="form-group">

@@ -24,6 +24,7 @@
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
+  margin-right: 55px; 
 }
 
 .btn-agregar:hover {
@@ -31,18 +32,19 @@
 }
 
 .tabla {
-  max-height: 700px;   
+  max-height: 610px;   
   overflow-y: auto;
   overflow-x: auto;
   padding: 0.5rem;
   border-radius: 15px;
+  margin-right: 25px; 
 }
 
 .tabla table {
   width: 100%;
   min-width: 850px;    
 }
-/* Scroll elegante */
+
 .tabla::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -284,4 +286,100 @@
 
 .form-group.full {
   grid-column: span 3;
+}
+.buscador {
+  padding: 0.1rem 1.5rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  outline: none;
+  width: 260px;
+  transition: 0.25s ease;
+  background: #f4f9f7;
+  margin-right: 2rem;
+}
+
+.buscador:focus {
+  border-color: #009f6b;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 159, 107, 0.25);
+}
+
+.tabs {
+  display: flex;
+  gap: 0.8rem;
+  margin: 1rem 0 1.5rem;
+  flex-wrap: wrap;
+}
+
+.tab {
+  padding: 0.5rem 2rem;
+  border-radius: 20px;
+  background: #e0f2f1;
+  border: 2px solid #b2dfdb;
+  color: #004d40;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.tab:hover {
+  background: #c8e6c9;
+  border-color: #81c784;
+}
+
+.tab.active {
+  background: #00796b;
+  border-color: #004d40;
+  color: white;
+}
+/* ---- TABS + BUSCADOR EN LA MISMA LÍNEA ---- */
+.tabs-buscador-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tab {
+  padding: 0.6rem 1.1rem;
+  background: #e0f2f1;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #004d40;
+}
+
+.tab.active {
+  background: #004d40;
+  color: #fff;
+}
+
+/* Buscador */
+.buscador {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
+  border: 2px solid #cfd8dc;
+}
+
+.buscador input {
+  border: none;
+  outline: none;
+  margin-left: 0.5rem;
+  background: transparent;
+  font-size: 1rem;
+}
+
+.icono-buscar {
+  color: #004d40;
 }

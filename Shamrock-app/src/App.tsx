@@ -60,8 +60,7 @@ export default function App() {
 
         if (session?.user?.email) {
           const email = session.user.email.trim();
-
-          // 🔥 FIX: permitir que empleados y roles_app terminen de insertarse
+          
           await new Promise((r) => setTimeout(r, 600));
 
           setUsuario(email);
