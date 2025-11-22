@@ -9,6 +9,7 @@ import Recompensas from "./pages/Recompensas";
 import Inicio from "./pages/Inicio";
 import Areas from "./pages/Areas";
 import RegistrarEmpleado from "./pages/RegistrarEmpleado";
+import Solicitudesrecompensas from "./pages/AdminCanjes";
 import "./App.css";
 
 type Rol = "admin" | "usuario";
@@ -213,6 +214,7 @@ export default function App() {
             <Route path="/recompensas" element={<Recompensas/>} />
             <Route path="/registrar" element={<RegistrarEmpleado />} />
             <Route path="/gestionareas" element={<Areas />} />
+            <Route path="/solicitudesrecompensas" element={<Solicitudesrecompensas />} />
             <Route path="*" element={<Navigate to="/Inicio" replace />} />
           </Routes>
         </main>

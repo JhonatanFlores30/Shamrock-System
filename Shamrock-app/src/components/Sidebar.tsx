@@ -17,6 +17,7 @@ export default function Sidebar({ user, onLogout }: SidebarProps) {
         <h1 className="logo">Shamrock</h1>
         <p className="usuario">Hola, {user}</p>
 
+        <div className="space-pusher"></div>
         <nav className="menu">
           <Link to="/" className="menu-item">
             <FaHome /> <span>Inicio</span>
@@ -29,6 +30,9 @@ export default function Sidebar({ user, onLogout }: SidebarProps) {
           </Link>
           <Link to="/gestionareas" className="menu-item">
             <FaUsers /> <span>Gestión de Áreas</span>
+          </Link>
+          <Link to="/solicitudesrecompensas" className="menu-item">
+            <FaUsers /> <span>Solicitudes de Canjes</span>
           </Link>
         </nav>
 

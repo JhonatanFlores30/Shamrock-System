@@ -308,12 +308,25 @@
   text-align: center;
 }
 
-.modal input,
-.modal textarea {
+.modal input{
   width: 85%;       
   margin: 0 auto 1rem; 
   display: block;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #c6c6c6;
+  font-size: 1rem;
+  background: #f7f9fc;
+  outline: none;
+  transition: all 0.25s ease;
+}
 
+.modal textarea
+{
+  color: #004d40;
+  width: 85%;       
+  margin: 0 auto 1rem; 
+  display: block;
   padding: 12px 14px;
   border-radius: 10px;
   border: 1px solid #c6c6c6;

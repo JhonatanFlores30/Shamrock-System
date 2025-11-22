@@ -1,0 +1,128 @@
+.canje-card {
+  background: #fff7cc;
+  border-radius: 14px;
+  padding: 1.5rem;
+
+  width: 94% !important;
+  max-width: 100% !important;
+
+  display: grid;
+  grid-template-columns: 180px 1fr 200px;
+  align-items: start;
+  gap: 1.5rem;
+
+  box-shadow: 0 5px 18px rgba(0,0,0,0.09);
+  border: 2px solid rgba(0,0,0,0.08);
+  animation: fadeIn 0.3s ease;
+
+  min-height: 220px;   
+  padding-right: 2rem;
+}
+
+.canje-img {
+  width: 160px;        
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.canje-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   
+  gap: 0.4rem;
+  min-width: 300px;
+}
+
+.canje-info h3 {
+  font-size: 1.3rem;
+  margin: 0 0 .3rem 0;
+  color: #004d40;
+}
+
+.canje-info p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.3rem;
+}
+
+.canje-fecha {
+  color: #555;
+}
+
+.canje-puntos {
+  color: #b86400;
+  font-weight: bold;
+  margin-top: 0.3rem;
+}
+
+/* Estado */
+.estado-tag {
+  margin-top: 0.5rem;
+  padding: 0.4rem 1rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.admin-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.btn-aprobar,
+.btn-rechazar {
+  width: 140px;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.btn-aprobar {
+  background: #00a65a;
+  color: #fff;
+}
+
+.btn-aprobar:hover {
+  background: #008b4b;
+}
+
+.btn-rechazar {
+  background: #d63031;
+  color: #fff;
+}
+
+.btn-rechazar:hover {
+  background: #b02424;
+}
+.canjes-scroll-wrapper {
+  width: 100%;
+  max-height: calc(90vh - 150px); 
+  overflow-y: auto;
+  padding-right: 340px;
+}
+
+.canjes-scroll-wrapper::-webkit-scrollbar {
+  width: 10px;
+}
+
+.canjes-scroll-wrapper::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+.canjes-scroll-wrapper::-webkit-scrollbar-thumb {
+  background: #c2c2c2;
+  border-radius: 10px;
+}
+
+.canjes-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}

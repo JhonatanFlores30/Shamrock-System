@@ -320,8 +320,8 @@ html, body, #root {
 }
 
 .confirm-btn {
-  background-color: #d32f2f;
-  color: white;
+  background-color: #ccc;
+  color: rgb(14, 13, 13);
   padding: 0.8rem 1.3rem;
   border: none;
   border-radius: 10px;
@@ -331,12 +331,12 @@ html, body, #root {
 }
 
 .confirm-btn:hover {
-  background-color: #b71c1c;
+  background-color: #03883f;
   transform: translateY(-2px);
 }
 
 .cancel-btn {
-  background-color: #e5e7eb;
+  background-color: #cc1406;
   padding: 0.8rem 1.3rem;
   border: none;
   border-radius: 10px;
